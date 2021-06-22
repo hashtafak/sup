@@ -40,7 +40,9 @@ func (sup *Stackup) Run(network *Network, envVars EnvList, commands ...*Command)
 	// Create clients for every host (either SSH or Localhost).
 	var bastion *SSHClient
 	if network.Bastion != "" {
-		bastion = &SSHClient{}
+		bastion = &SSHClient{
+			password: network.Password,
+		}
 		if err := bastion.Connect(network.Bastion); err != nil {
 			return errors.Wrap(err, "connecting to bastion failed")
 		}
@@ -73,6 +75,7 @@ func (sup *Stackup) Run(network *Network, envVars EnvList, commands ...*Command)
 				env:   env + `export SUP_HOST="` + host + `";`,
 				user:  network.User,
 				color: Colors[i%len(Colors)],
+				password: network.Password,
 			}
 
 			if bastion != nil {
