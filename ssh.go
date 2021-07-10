@@ -142,6 +142,7 @@ func (c *SSHClient) ConnectWith(host string, dialer SSHDialFunc) error {
 			ssh.Password(c.password),
 		},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+		Timeout : time.Second * 10,
 	}
 
 	c.conn, err = dialer("tcp", c.host, config)
