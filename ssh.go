@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/agent"
@@ -142,7 +143,7 @@ func (c *SSHClient) ConnectWith(host string, dialer SSHDialFunc) error {
 			ssh.Password(c.password),
 		},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-		Timeout : 10000,
+		Timeout : time.Second * 10,
 	}
 
 	c.conn, err = dialer("tcp", c.host, config)
